@@ -1,34 +1,6 @@
 <html>
   <head>
     <title>KNotes - Notepad for eReaders</title>
-
-  <script>
-    document.getElementById('export').addEventListener('click', function() {
-      var text = document.getElementById('textbox').value;
-      if(!text.trim()) { alert("Please write something first!"); return; }
-
-      // Create simple XHTML file
-      var content = `
-<?xml version="1.0" encoding="UTF-8"?>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head><title>My Note</title></head>
-<body>
-<p>${text.replace(/\n/g, "<br/>")}</p>
-</body>
-</html>`;
-
-      // Create a data URL
-      var blob = new Blob([content], {type: "text/plain"}); // Kobo may only save as text
-      var url = URL.createObjectURL(blob);
-
-      // Display link to copy/save manually
-      var link = document.createElement("a");
-      link.href = url;
-      link.innerText = "Click here to save your note";
-      link.download = "note.xhtml"; // EPUB creation will need a PC
-      document.body.appendChild(link);
-    });
-  </script>
   </head>
   <body>
     <h1>KNotes</h1>
@@ -36,5 +8,35 @@
     <p>Under construction! Please check back later.</p>
     <textarea rows="10" cols="40" placeholder="Begin writing..." id="textbox"></textarea>
     <button id="export">Export to eReader</button>
+    <div id="link-container"></div>
+
+  <script>
+    const exportBtn = document.getElementById("export");
+    const textbox = document.getElementById("textbox");
+    const linkContainer = document.getElementById("link-container");
+
+    exportBtn.addEventListener("click", function() {
+      const text = textbox.value;
+      if (!text.trim()) {
+        alert("Please write something first!");
+        return;
+      }
+
+   
+      // Create a Blob
+      const blob = new Blob([text], { type: "text/plain" });
+
+      // Create a downloadable link
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "note.txt";
+      a.textContent = "Click here to download your note";
+
+      // Clear previous link, append new one
+      linkContainer.innerHTML = "";
+      linkContainer.appendChild(a);
+    });
+  </script>
   </body>
 </html>
