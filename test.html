@@ -21,21 +21,15 @@
         return;
       }
 
-      // Wrap content in XHTML
-      const xhtml = `<?xml version="1.0" encoding="UTF-8"?>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head><title>My Note</title></head>
-<body><p>${text.replace(/\n/g, "<br/>")}</p></body>
-</html>`;
-
+   
       // Create a Blob
-      const blob = new Blob([xhtml], { type: "application/xhtml+xml" });
+      const blob = new Blob([text], { type: "text/plain" });
 
       // Create a downloadable link
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "note.xhtml";
+      a.download = "note.txt";
       a.textContent = "Click here to download your note";
 
       // Clear previous link, append new one
