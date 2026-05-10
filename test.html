@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>KNotes Test</title>
+</head>
+<body>
+  <h1>KNotes</h1>
+  <textarea id="textbox" placeholder="Begin writing..." rows="10" cols="40"></textarea><br/>
+  <button id="export">Save Note</button>
+  <div id="link-container"></div>
+
+  <script>
+    const exportBtn = document.getElementById("export");
+    const textbox = document.getElementById("textbox");
+    const linkContainer = document.getElementById("link-container");
+
+    exportBtn.addEventListener("click", function() {
+      const text = textbox.value;
+      if (!text.trim()) {
+        alert("Please write something first!");
+        return;
+      }
+
+      // Wrap content in XHTML
+      const xhtml = `<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>My Note</title></head>
+<body><p>${text.replace(/\n/g, "<br/>")}</p></body>
+</html>`;
+
+      // Create a Blob
+      const blob = new Blob([xhtml], { type: "application/xhtml+xml" });
+
+      // Create a downloadable link
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "note.xhtml";
+      a.textContent = "Click here to download your note";
+
+      // Clear previous link, append new one
+      linkContainer.innerHTML = "";
+      linkContainer.appendChild(a);
+    });
+  </script>
+</body>
+</html>
